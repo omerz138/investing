@@ -1,0 +1,19 @@
+<div class="instruments-container">
+  <h1 (click)="openDialog()">Investing.com</h1>
+
+  <mat-form-field class="search-instrument">
+    <input matInput (keyup)="applyFilter($event.target.value)" placeholder="Search" />
+  </mat-form-field>
+
+  <div mat-dialog-actions>
+    <button class="add-button" mat-button (click)="openDialog()">Add New Instrument</button>
+  </div>
+
+  <app-instruments-table
+    [filteredInstruments]="filteredInstruments"
+    [columnHeader]="columnHeader"
+    [columnInfoHeaders]="columnInfoHeaders"
+    (instrumentDeleted)="deleteInstrument($event)"
+  >
+  </app-instruments-table>
+</div>

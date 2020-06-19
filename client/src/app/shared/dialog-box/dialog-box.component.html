@@ -1,0 +1,13 @@
+<h1 mat-dialog-title>{{ data.action }}</h1>
+<div mat-dialog-content>
+  <mat-form-field *ngFor="let key of objectKeys(data.fields)">
+    <input placeholder="{{ data.fields[key] }}" matInput [(ngModel)]="returnedData[key]" />
+  </mat-form-field>
+</div>
+<div class="error-message" *ngIf="errorMessage">
+  {{ errorMessage }}
+</div>
+<div mat-dialog-actions>
+  <button mat-button (click)="doAction()">{{ data.action }}</button>
+  <button mat-button (click)="closeDialog()" mat-flat-button color="warn">Cancel</button>
+</div>

@@ -1,0 +1,18 @@
+<table mat-table [dataSource]="filteredInstruments" matSort class="mat-elevation-z8">
+  <ng-container [matColumnDef]="tableData" *ngFor="let tableData of objectKeys(columnInfoHeaders)">
+    <th class="table-cell" mat-header-cell *matHeaderCellDef mat-sort-header>
+      {{ columnHeader[tableData] }}
+    </th>
+    <td class="table-cell" mat-cell *matCellDef="let element">{{ element[tableData] }}</td>
+  </ng-container>
+
+  <ng-container matColumnDef="action">
+    <th mat-header-cell *matHeaderCellDef>Actions</th>
+    <td mat-cell *matCellDef="let element">
+      <mat-icon (click)="deleteInstrument(element)">delete icon</mat-icon>
+    </td>
+  </ng-container>
+
+  <tr mat-header-row *matHeaderRowDef="objectKeys(columnHeader)"></tr>
+  <tr mat-row *matRowDef="let row; columns: objectKeys(columnHeader)"></tr>
+</table>
