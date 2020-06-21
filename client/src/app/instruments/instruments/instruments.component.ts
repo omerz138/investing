@@ -21,6 +21,7 @@ export class InstrumentsComponent implements OnInit {
   ngOnInit(): void {
     this.instrumentsService.getAll().subscribe((data) => {
       this.instrumentsData = data;
+      // creating a deep copy
       this.filteredInstruments = JSON.parse(JSON.stringify(this.instrumentsData));
       this.sortInstruments();
     });
@@ -35,20 +36,21 @@ export class InstrumentsComponent implements OnInit {
       },
     });
 
-    dialogRef.afterClosed().subscribe((result) => {
-      if (result) {
-        this.instrumentsService.add(result.data).subscribe(
-          (data: InstrumentApi) => {
-            this.instrumentsData.push(data);
-            this.filterInstruments();
-            console.log(this.filteredInstruments);
-          },
-          (err) => {
-            console.log('Error Adding:' + err);
-          }
-        );
-      }
-    });
+    dialogRef.afterClosed().subscribe(this.onDialogClosed.bind(this));
+  }
+
+  private onDialogClosed(result) {
+    if (result) {
+      this.instrumentsService.add(result.data).subscribe(
+        (data: InstrumentApi) => {
+          this.instrumentsData.push(data);
+          this.filterInstruments();
+        },
+        (err) => {
+          console.log('Error Adding:' + err);
+        }
+      );
+    }
   }
 
   applyFilter(value: string) {
@@ -57,14 +59,13 @@ export class InstrumentsComponent implements OnInit {
     this.filterInstruments();
   }
 
-  deleteInstrument(instrumentId: number) {
+  deleteInstrument(instrumentId: string) {
     this.instrumentsService.remove(instrumentId).subscribe(
-      (data) => {
+      () => {
         this.instrumentsData = this.instrumentsData.filter(
-          (item: InstrumentApi) => item.instrumentId !== data.instrumentId
+          (item: InstrumentApi) => item.instrumentId !== Number(instrumentId)
         );
         this.filterInstruments();
-        console.log(this.filteredInstruments);
       },
       (err) => {
         console.log('Error deleting:' + err);

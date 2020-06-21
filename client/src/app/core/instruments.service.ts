@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { HttpClient, HttpHeaders } from '@angular/common/http';
+import { HttpClient, HttpHeaders, HttpParams } from '@angular/common/http';
 import { InstrumentApi } from '../models/instrument.model';
 import { Observable } from 'rxjs';
 
@@ -14,16 +14,17 @@ export class InstrumentsService {
   constructor(private http: HttpClient) {}
 
   getAll(): Observable<InstrumentApi[]> {
-    return this.http.get<InstrumentApi[]>('/api', this.httpOptions);
+    return this.http.get<InstrumentApi[]>('/api/instrument', this.httpOptions);
   }
 
   add(instrument: InstrumentApi): Observable<any> {
     this.httpOptions.headers.append('responseType', 'text');
-    return this.http.post('/api/add-instrument', instrument, this.httpOptions);
+    return this.http.post('/api/instrument', instrument, this.httpOptions);
   }
 
-  remove(instrumentId: number): Observable<any> {
-    const body = { instrumentId };
-    return this.http.post<InstrumentApi[]>('/api/remove-instrument', body, this.httpOptions);
+  remove(instrumentId: string): Observable<any> {
+    const httpParams = new HttpParams().set('instrumentId', instrumentId);
+    const deleteHttpOptions = { ...this.httpOptions, params: httpParams };
+    return this.http.delete<InstrumentApi[]>('/api/instrument', deleteHttpOptions);
   }
 }

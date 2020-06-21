@@ -1,4 +1,5 @@
-import { InstrumentsService } from "../services/instruments.service";
+import { InstrumentsService } from '../services/instruments.service';
+import { raw } from 'body-parser';
 
 const getAll = async (req: any, res: any) => {
   try {
@@ -7,12 +8,12 @@ const getAll = async (req: any, res: any) => {
     res.json(allInstruments);
   } catch (err) {
     res.status(404);
-    res.send("Error while trying to fetch instruents");
+    res.send('Error while trying to fetch instruents');
   }
 };
 
 const remove = (req: any, res: any) => {
-  const instrumentId = req.body.instrumentId;
+  const instrumentId = req.query.instrumentId;
   InstrumentsService.remove(instrumentId)
     .then(() => {
       res.status(200);
@@ -30,7 +31,8 @@ const add = (req: any, res: any) => {
   const instrument = req.body;
   InstrumentsService.add(instrument)
     .then(() => {
-      res.status(200);
+      instrument.instrumentId = Number(instrument.instrumentId);
+      res.status(201);
       res.send(instrument);
     })
     .catch((err) => {
