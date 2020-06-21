@@ -82,8 +82,8 @@ export class InstrumentsComponent implements OnInit {
   private filterInstruments() {
     this.filteredInstruments = this.instrumentsData.filter((instrument) => {
       return (
-        instrument.name.toLowerCase().includes(this.searchTerm) ||
-        instrument.instrumentType.includes(this.searchTerm)
+        (instrument.name && instrument.name.toLowerCase().includes(this.searchTerm)) ||
+        (instrument.instrumentType && instrument.instrumentType.includes(this.searchTerm))
       );
     });
 
